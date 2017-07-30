@@ -15,33 +15,35 @@ export class PostService {
   constructor(private http: Http) { }
 
   getPosts() {
-    return this.http.get(this.url);
+    return this.http.get(this.url)
+      .catch(this.handleError);
   }
 
   createPost(post) {
     return this.http.post(this.url, JSON.stringify(post))
-      .catch((error: Response) => {
-        // tslint:disable-next-line:curly
-        if (error.status === 400)
-          return Observable.throw(new BadRequest(error.json()));
-
-        return Observable.throw(new AppError(error.json()));
-      });
+      .catch(this.handleError);
   }
 
   updatePost(post) {
-    return this.http.put(this.url + '/' + post.id, JSON.stringify(post));
+    return this.http.put(this.url + '/' + post.id, JSON.stringify(post))
+      .catch(this.handleError);
   }
 
   deletePost(post) {
     return this.http.delete(this.url + '/' + post.id)
-      .catch((error: Response) => {
-        // tslint:disable-next-line:curly
-        if (error.status === 404)
-          return Observable.throw(new NotFoundError());
+      .catch(this.handleError);
+  }
 
-        return Observable.throw(new AppError(error.json()));
-      });
+  private handleError(error: Response) {
+    // tslint:disable-next-line:curly
+    if (error.status === 404)
+      return Observable.throw(new NotFoundError());
+
+    // tslint:disable-next-line:curly
+    if (error.status === 400)
+      return Observable.throw(new BadRequest(error.json()));
+
+    return Observable.throw(new AppError(error.json()));
   }
 
 }
