@@ -11,6 +11,9 @@
     <button 
       class="btn btn-default btn-sm"
       (click)="updatePost(post)">Update</button>
+    <button 
+      (click)="deletePost(post)"
+      class="btn btn-danger btn-sm">Delete</button>
     {{ post.title }}
   </li>
 </ul>

@@ -37,4 +37,12 @@ export class PostsComponent implements OnInit {
       .subscribe(res => console.log(res));
   }
 
+  deletePost(post) {
+    this.http.delete(this.url + '/' + post.id)
+      .subscribe(res => {
+        const index = this.posts.indexOf(post);
+        this.posts.splice(index, 1);
+      });
+  }
+
 }
