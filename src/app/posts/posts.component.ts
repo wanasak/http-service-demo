@@ -42,6 +42,12 @@ export class PostsComponent implements OnInit {
       .subscribe(res => {
         const index = this.posts.indexOf(post);
         this.posts.splice(index, 1);
+      }, (error: Response) => {
+        if (error.status === 404) {
+          alert('This post has already  been deleted.');
+        } else {
+          console.error(error);
+        }
       });
   }
 
