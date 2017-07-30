@@ -1,3 +1,6 @@
+import { BadRequest } from './../common/bad-request';
+import { NotFoundError } from './../common/not-found-error';
+import { AppError } from './../common/app-error';
 import { PostService } from './../service/post.service';
 import { Component, OnInit } from '@angular/core';
 
@@ -27,6 +30,12 @@ export class PostsComponent implements OnInit {
       .subscribe(res => {
         post['id'] = res.json().id;
         this.posts.splice(0, 0, post);
+      }, (error: AppError) => {
+        if (error instanceof BadRequest) {
+
+        } else {
+          console.error(error.originalError);
+        }
       });
   }
 
@@ -42,8 +51,8 @@ export class PostsComponent implements OnInit {
       .subscribe(res => {
         const index = this.posts.indexOf(post);
         this.posts.splice(index, 1);
-      }, (error: Response) => {
-        if (error.status === 404) {
+      }, (error: AppError) => {
+        if (error  instanceof NotFoundError) {
           alert('This post has already  been deleted.');
         } else {
           console.error(error);
