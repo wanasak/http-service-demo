@@ -15,6 +15,8 @@ export class PostsComponent implements OnInit {
     this.service.getPosts()
       .subscribe(res => {
         this.posts = res.json();
+      }, error => {
+        console.error(error);
       });
   }
 
