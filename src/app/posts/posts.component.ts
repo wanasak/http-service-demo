@@ -15,49 +15,52 @@ export class PostsComponent implements OnInit {
   constructor(private service: PostService) {}
 
   ngOnInit() {
-    this.service.getAll()
-      .subscribe(res => {
-        this.posts = res.json();
-      }, error => {
+    this.service.getAll().subscribe(
+      posts => (this.posts = posts),
+      error => {
         throw error;
-      });
+      }
+    );
   }
 
   createPost(input: HTMLInputElement) {
     const post = { title: input.value };
     input.value = '';
-    this.service.create(post)
-      .subscribe(res => {
-        post['id'] = res.json().id;
-        this.posts.splice(0, 0, post);
-      }, (error: AppError) => {
+    this.service.create(post).subscribe(
+      newPost => {
+        newPost['id'] = newPost.id;
+        this.posts.splice(0, 0, newPost);
+      },
+      (error: AppError) => {
         if (error instanceof BadRequest) {
-
         } else {
           throw error;
         }
-      });
+      }
+    );
   }
 
   updatePost(post) {
     // this.http.patch(this.url + '/' + post.id, JSON.stringify({ isRead: true }))
     //   .subscribe(res => console.log(res));
-    this.service.update(post)
-      .subscribe(res => console.log(res));
+    this.service
+      .update(post)
+      .subscribe(updatedPost => console.log(updatedPost));
   }
 
   deletePost(post) {
-    this.service.delete(post.id)
-      .subscribe(res => {
+    this.service.delete(post.id).subscribe(
+      () => {
         const index = this.posts.indexOf(post);
         this.posts.splice(index, 1);
-      }, (error: AppError) => {
-        if (error  instanceof NotFoundError) {
+      },
+      (error: AppError) => {
+        if (error instanceof NotFoundError) {
           alert('This post has already  been deleted.');
         } else {
           throw error;
         }
-      });
+      }
+    );
   }
-
 }
