@@ -1,6 +1,7 @@
+import { AppErroHandler } from './common/app-error-handler';
 import { PostService } from './service/post.service';
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, ErrorHandler } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
@@ -18,7 +19,10 @@ import { PostsComponent } from './posts/posts.component';
     ReactiveFormsModule,
     HttpModule
   ],
-  providers: [PostService],
+  providers: [
+    PostService,
+    { provide: ErrorHandler, useClass: AppErroHandler }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

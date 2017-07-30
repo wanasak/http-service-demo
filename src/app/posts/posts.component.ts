@@ -19,7 +19,7 @@ export class PostsComponent implements OnInit {
       .subscribe(res => {
         this.posts = res.json();
       }, error => {
-        console.error(error);
+        throw error;
       });
   }
 
@@ -34,7 +34,7 @@ export class PostsComponent implements OnInit {
         if (error instanceof BadRequest) {
 
         } else {
-          console.error(error.originalError);
+          throw error;
         }
       });
   }
@@ -55,7 +55,7 @@ export class PostsComponent implements OnInit {
         if (error  instanceof NotFoundError) {
           alert('This post has already  been deleted.');
         } else {
-          console.error(error);
+          throw error;
         }
       });
   }
